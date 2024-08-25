@@ -1,0 +1,86 @@
+version: "3"
+
+services:
+  db:
+    container_name: postgres_patriiot
+    image: postgres:14.1
+    ports:
+      - 5434:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+    networks:
+      - patriiot-net
+    environment:
+      - POSTGRES_DB=patriiot_backend
+      - POSTGRES_USER=patriiot
+      - POSTGRES_PASSWORD=patrii0t@
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "5050:80"
+    networks:
+      - patriiot-net
+    
+  emqx:
+    image: emqx:5.4
+    container_name: emqx
+    ports:
+      - "18083:18083"
+      - "1883:1883"
+      - "8083:8083"
+    environment:
+      - EMQX_NAME=emqx
+      - EMQX_LISTENER__TCP__EXTERNAL=1883
+      - EMQX_LISTENER__TCP__INTERNAL=18083
+      - EMQX_HTTP__PORT=8083
+      - EMQX_ALLOW_ANONYMOUS=true
+    volumes:
+      - ./emqx/emqx.conf:/opt/emqx/etc/emqx.conf
+    networks:
+      - patriiot-net
+
+  # django:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/local.Dockerfile
+  #   container_name: patriot_backend
+  #   command: |
+  #     sh -c "sleep 5 && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+  #   ports:
+  #     - 8040:8000
+  #   # volumes:
+  #   #   - .:/app
+  #   depends_on:
+  #     - db
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - patriiot-net
+
+
+  # subscriber:
+  #   build:
+  #     context: .
+  #     dockerfile: broker/sub.Dockerfile
+  #   container_name: subscriber
+  #   command: sh -c "./broker/broker.sh"
+  #   depends_on:
+  #     - emqx
+  #     - db
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - patriiot-net
+
+
+networks:
+  patriiot-net:
+    driver: bridge
+volumes:
+    postgres-data:
+

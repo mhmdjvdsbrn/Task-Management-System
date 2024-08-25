@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16.1
+    environment:
+      - POSTGRES_DB=task_backend
+      - POSTGRES_USER=task
+      - POSTGRES_PASSWORD=task_backend@
+    ports:
+      - 5435:5432
+    volumes:
+      - postgres-data2:/var/lib/postgresql/data/
+    networks:
+      - test
+
+  pgadmin:
+    image: dpage/pgadmin4:8.2
+    restart: always
+    ports:
+      - "5050:80"
+    networks:
+      - test
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+
+  back:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - 8000:8000
+    environment:
+      # - DEBUG=True
+      - ALLOWED_HOSTS=0.0.0.0,localhost,127.0.0.1
+      - APP_DOMAIN=http://localhost:8000
+      - CORS_ORIGIN_WHITELIST=http://localhost:3000
+
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+
+      - SESSION_COOKIE_SECURE=True
+
+      - SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO,https
+      - SECURE_SSL_REDIRECT=True
+      - SECURE_CONTENT_TYPE_NOSNIFF=True
+    depends_on:
+      - db
+    networks:
+      - test
+
+
+networks:
+  test:
+    driver: bridge
+volumes:
+  postgres-data2:
