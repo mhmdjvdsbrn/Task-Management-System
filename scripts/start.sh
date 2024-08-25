@@ -11,3 +11,4 @@ python3 manage.py test task_backend.users.tests.test_model_users task_backend.us
 # Start server
 echo "--> Starting web process"
 gunicorn config.wsgi:application -b 0.0.0.0:8000
+
