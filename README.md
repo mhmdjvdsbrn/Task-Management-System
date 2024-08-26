@@ -77,5 +77,17 @@ This project is a simple Task Management System built with Django and Django RES
   /tasks-list/?created_at=2024-08-26
   ```
 
+### Example User
+
+To test the API, you can use the following example user credentials:
+
+```json
+{
+  "phone": "09227096188",
+  "password": "Strong@123"
+}
+```
+
+
 
 
