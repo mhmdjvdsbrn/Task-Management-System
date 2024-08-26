@@ -10,11 +10,10 @@ services:
       - POSTGRES_PASSWORD=task_backend@
     ports:
       - 5432:5432
-    # volumes:
-    #   - postgres-data2:/var/lib/postgresql/data/
+    volumes:
+      - postgres-data1:/var/lib/postgresql/data/
     networks:
       - test
-
   pgadmin:
     container_name: task_backend_pgadmin
     image: dpage/pgadmin4:8.2
@@ -28,7 +27,7 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin
 
   back:
-    container_name: task_backend_back
+    container_name: task_backend
     build:
       context: .
       dockerfile: Dockerfile
@@ -59,4 +58,4 @@ networks:
     driver: bridge
 
 volumes:
-  postgres-data2:
+  postgres-data1:
