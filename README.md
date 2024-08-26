@@ -1,46 +1,81 @@
+Here's the updated README document with the detailed API Endpoints:
+
+---
+
 # Task Management BackEnd
 
-## project setup
+This project is a simple Task Management System built with Django and Django REST Framework. It allows users to manage their tasks efficiently, with custom authentication using mobile phone numbers and passwords.
 
-1
 
-```
-cd Task_Management
-```
+## Project Setup
 
-2- SetUp venv
+1. **Navigate to the project directory:**
+   ```bash
+   cd Task_Management
+   ```
 
-```
-virtualenv -p python3.10 venv
-source venv/bin/activate
-```
+2. **Set up a virtual environment:**
+   ```bash
+   virtualenv -p python3.10 venv
+   source venv/bin/activate
+   ```
 
-3- install Dependencies
+3. **Install the required dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```
-pip install -r requirements.txt
-```
+4. **Create your environment file:**
+   ```bash
+   cp .env.dev .env
+   ```
 
-4- create your env
+5. **Create database tables:**
+   ```bash
+   python manage.py migrate
+   ```
 
-```
-cp .env.dev .env
-```
+6. **Spin up Docker Compose:**
+   ```bash
+   docker compose -f compose.yml up -d
+   ```
 
-5- Create tables
+7. **Run the project:**
+   ```bash
+   python manage.py runserver
+   ```
 
-```
-python manage.py migrate
-```
+## Testing the models,validators,selectors,serveices & API View
 
-6- spin off docker compose
+1. **Running Unit Tests:**
+   - To run the unit tests for your project, execute the following command:
+     ```bash
+     python manage.py test
+     ```
 
-```
-docker compose -f compose.dev.yml up -d
-```
+2. **API Endpoints:**
+   - The API can be accessed via the following endpoints:
+     - `/api/auth/jwt/login/` - User login.
+     - `/api/auth/jwt/refresh/` - Refresh token.
+     - `/api/auth/jwt/logout/` - User logout.
+     - `/api/users/register/` - Register a new user.
+     - `/api/users/profile/` - View user profile.
+     - `/api/users/profile/verify/` - Complete profile verification.
+     - `/api/tasks-list/` - List tasks.
+     - `/api/tasks-detail/<int:pk>/` - Retrieve task details.
+     - `/api/new_tasks/` - Create a new task.
+     - `/api/update_tasks/<int:pk>/` - Update a task.
+     - `/api/delete_tasks/<int:pk>/` - Delete a task.
 
-7- run the project
+   - Explore the full API documentation via the Swagger UI at `/api/schema/swagger-ui/`.
 
-```
-python manage.py runserver
-```
+### Filtering Tasks
+
+- You can filter tasks by `title` and `created_at` by passing the relevant query parameters to the task list endpoint. For example:
+  ```bash
+  /tasks-list/?title=shopping
+  /tasks-list/?created_at=2024-08-26
+  ```
+
+
+
